@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<?php 
+	echo $this->headLink()->appendStylesheet( '../css/order.css');
+	print $this->headScript()->appendFile('../'.$this->baseUrl().'plugins/jQuery/jquery.js');
+	print $this->headScript()->appendFile('../'.$this->baseUrl().'plugins/leanmodal/jquery.leanModal.min.js'); 
+	print $this->headScript()->appendFile('../'.$this->baseUrl().'js/order.js');
+	?>
+
+</head>
+
+<body>
+	<div class="header">Orders management app </div>
+		<div class="content-add row">
+			<div class="titre">Add new order</div>
+
+			<form method="POST" action="<?php echo $this->url(array('controller' => 'order', 'action' => 'add-order')) ?>">
+
+				<label>User</label>
+				<div class="mainselection">
+					<select name="user" >
+						<?php for($i=0 ; $i<count($this->users) ; $i++):?>
+
+						<option value="<?php echo $this->users[$i]["userId"]?>"><?php echo $this->users[$i]["userName"]?></option>
+					<?php endfor;?>
+					</select>
+				</div>
+
+				<label>Product</label>
+				<div class="mainselection">
+					<select name="product" >
+						<?php for($j=0 ; $j<count($this->products) ; $j++):?>
+
+						<option value="<?php echo $this->products[$j]["productId"]?>"><?php echo $this->products[$j]["productName"]?></option>
+					<?php endfor;?>
+					</select>
+				</div>
+
+				<label>Quantity</label>
+				<div>
+					<input type="number" name="quantity">
+				</div>
+				
+				<input type="submit" class="button-add" value="Add">
+			</div>
+		</form>
+	</div>
+
+
+	<!--Search orders-->
+	<div class="content-search row">
+		<div class="titre">Search</div>
+		<form method="POST" action="<?php echo $this->url(array(
+		                                         'controller' => 'order',
+		                                         'action' => 'edit-orders',
+		                                         )); ?>">
+		    <label>Date</label>
+		    <div class="mainselection">
+		    	<select name="date">
+					<option value="" selected>--</option>
+					<option value="all">All time</option>
+					<option value="week">Last 7 days</option>
+					<option value="today">Today</option>
+				</select>
+		    </div>
+			<div>
+				<input type="text" name="search" placeholder="Enter user or product name">
+			</div>
+				<input type="submit" class="button-add">
+		</form>
+	</div>
+<!--Edit orders-->
+	<div class="table">
+	<?php $orders = $this->orders; 
+	if(!empty($orders)):?>
+		<table cellpadding=10 border=1 >
+			<tr>
+				<th>User</th>
+				<th>Product</th>
+				<th>Price</th>
+				<th>Quantity</th>
+				<th>Total</th>
+	            <th>Date</th>
+	            <th>Actions</th>
+			</tr>
+	<?php
+
+		for($i=0 ; $i< count($orders); $i++):?>
+		    <tr>
+		        <td><?php echo $orders[$i]["userName"]?></td>
+		        <td><?php echo $orders[$i]["productName"]?></td>
+		        <td><?php echo $orders[$i]["productPrice"]?></td>
+		        <td><?php echo $orders[$i]["quantity"]?></td>
+		        <td><?php echo $orders[$i]["price"]?></td>
+		        <td><?php echo $orders[$i]["orderDate"]?></td>
+		    	<td>
+		         	<a id="go" rel="leanModal" name="edit" href="#edit_<?php echo $i?>">Edit</a>
+
+					<div id="edit_<?php echo $i?>" style="display: none;">
+						<div id="signup-ct">
+							<div id="signup-header">
+								<h2>Edit Order</h2>
+								<a class="modal_close" href="#"></a>
+							</div>
+							
+							<form method="POST" action="<?php echo $this->url(array(
+		                                         'controller' => 'order',
+		                                         'action' => 'update-orders',
+		                                         )); ?>" class="back">
+		                                         
+			     				<label for="">Username</label>
+							  	<div class="mainselection">
+							    
+								    <select name="user">
+										<?php for($k=0 ; $k<count($this->users) ; $k++):?>
+											<?php	if($this->users[$k]["userName"] == $orders[$i]["userName"]): ?>
+											<option value="<?php echo $this->users[$k]["userId"]?>" selected><?php echo $this->users[$k]["userName"]?></option>
+										<?php  else:?>
+										<option value="<?php echo $this->users[$k]["userId"]?>"><?php echo $this->users[$k]["userName"]?></option>
+									<?php endif; endfor;?>
+									</select>
+								</div>
+
+							  	<label for="">Product name</label>
+							  	<div class="mainselection">
+							    
+							    
+								    <select name="product">
+										<?php for($j=0 ; $j<count($this->products) ; $j++):?>
+										<?php	if($this->products[$j]["productName"] == $orders[$i]["productName"]): ?>
+											<option value="<?php echo $this->products[$j]["productId"]?>" selected><?php echo $this->products[$j]["productName"]?></option>
+										<?php  else:?>
+										<option value="<?php echo $this->products[$j]["productId"]?>"><?php echo $this->products[$j]["productName"]?></option>
+									<?php endif;?>
+									<?php endfor;?>
+									</select>
+							 	</div>
+						 
+							 	<label for="">Quantity</label>
+							  	<div >
+							    	<input id="" name="quantity" type="text" value="<?php echo $orders[$i]["quantity"]?>">
+							 	</div>
+
+							  	<div class="txt-fld">
+							  		<input id="<?php echo $orders[$i]["orderId"]?>" name="orderId" type="hidden" value="<?php echo $orders[$i]["orderId"]?>">
+							  	</div>
+							  	<div class="btn-fld">
+							  		<button type="submit" class="button-add">Update</button>
+								</div>
+						 	</form>
+						</div>
+					</div>
+
+			        <a id="go_delete" rel="leanModal" name="delete" href="#delete_<?php echo $i?>">Delete</a>
+			        <div id="delete_<?php echo $i?>" style="display: none;">
+						<div id="signup-ct">
+							<div id="signup-header">
+								<h2>Delete Order</h2>
+								
+								<a class="modal_close" href="#"></a>
+							</div>
+							
+							<form method="POST" action="<?php echo $this->url(array(
+			                                         'controller' => 'order',
+			                                         'action' => 'delete-order',
+			                                         )); ?>" class="back-del">
+
+			                   	<div class="txt-fld">
+			                   Etes-vous s&ucirc;r de vouloir supprimer cette commande?
+							  		<input id="<?php echo $orders[$i]["orderId"]?>" name="orderId" type="hidden" value="<?php echo $orders[$i]["orderId"]?>">
+							  	</div>
+							  	<div class="btn-fld">
+							  		<button type="submit" class="button-add">Delete</button>
+								</div>
+						 	</form>
+						</div>
+					</div>
+			    </td>
+			</tr>
+           <?php
+		endfor;
+	else:?>
+	Aucun order
+<?php endif;?>
+	</table>
+</div>
+</body>
+</html>
