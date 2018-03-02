@@ -1,5 +1,29 @@
-Order management application:
+Order management application
 
+#Description
+
+create a simple orders management app, which allows the user to:
+
+1. Add, edit and delete orders
+
+2. See a list of all orders
+
+3. Filter orders from today, last 7 days and all time
+
+4. Filter orders by user or product name
+
+The data will be stored in MySQL database in these tables: order, product and user. You need to create appropriate structure.
+
+Special business requirements:
+
+- Discount of 20% must be applied to the total cost of any order when at least 3 items of "Pepsi Cola" are selected.
+
+
+#Présentation du résultat
+
+Vous pouvez consulter le résultat sous: le lien: "hostname"/orders/edit-orders
+
+#Base de données
 --
 -- Base de données :  `orders_management`
 --
@@ -16,21 +40,6 @@ CREATE TABLE `orders` (
   `orderDate` datetime NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
---
--- Contenu de la table `orders`
---
-
-INSERT INTO `orders` (`orderId`, `userId`, `orderDate`) VALUES
-(6, 2, '2018-02-09 10:29:10'),
-(7, 1, '2018-02-28 10:52:01'),
-(8, 3, '2018-03-01 12:43:25'),
-(9, 2, '2018-03-01 08:55:24'),
-(10, 1, '2018-03-02 12:42:17'),
-(11, 1, '2018-03-02 12:42:49'),
-(12, 2, '2018-03-02 12:58:59'),
-(13, 1, '2018-03-02 01:00:13');
-
--- --------------------------------------------------------
 
 --
 -- Structure de la table `order_detail`
@@ -44,21 +53,7 @@ CREATE TABLE `order_detail` (
   `discount` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Contenu de la table `order_detail`
---
 
-INSERT INTO `order_detail` (`orderId`, `productId`, `quantity`, `price`, `discount`) VALUES
-(6, 1, 3, 5.4, 0),
-(7, 1, 3, 5.4, 0),
-(8, 3, 3, 3.84, 0.8),
-(9, 3, 3, 3.84, 0.8),
-(10, 1, 3, 5.4, 0),
-(11, 1, 3, 5.4, 0),
-(12, 3, 3, 3.84, 0.8),
-(13, 1, 9, 16.2, 0);
-
--- --------------------------------------------------------
 
 --
 -- Structure de la table `product`
